@@ -1,0 +1,30 @@
+from simrec.config import LazyCall
+from .common.dataset import dataset
+from .common.train import train
+from .common.optim import optim
+from .common.models.simrec import model
+
+
+# Refine data path depend your own need
+dataset.dataset="refcocog"
+dataset.ann_path["refcocog"] = "data/anns/refcocog/refcocog.json"
+dataset.image_path["refcocog"] = "data/images/train2014"
+dataset.mask_path["refcocog"] = "data/masks/refcocog"
+
+# Refine training cfg
+train.epochs=30
+train.output_dir = "./output/refg_xiaorong_03"
+train.batch_size = 8
+train.save_period = 10
+train.log_period = 10
+train.evaluation.eval_batch_size = 8
+train.sync_bn.enabled = False
+train.auto_resume.enabled = True
+
+# Refine optim
+optim.lr = train.base_lr
+
+# Refine model cfg
+model.visual_backbone.pretrained = True
+model.visual_backbone.freeze_backbone = True
+model.visual_backbone.pretrained_weight_path="data/weights/pretrained_weights/cspdarknet_coco.pth"
